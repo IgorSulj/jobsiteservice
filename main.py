@@ -1,5 +1,4 @@
-from typing import Annotated
-from fastapi import FastAPI, File
+from fastapi import FastAPI
 
 from models import WorkBlankModel
 
@@ -7,5 +6,5 @@ app = FastAPI()
 
 
 @app.post("/")
-def main(work_blank: WorkBlankModel, files: Annotated[bytes, File()]):
+def main(work_blank: WorkBlankModel):
     pass

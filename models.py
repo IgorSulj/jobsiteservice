@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, EmailStr
 from pydantic.alias_generators import to_camel
 
-from utils import PhoneStr
+from utils import Base64ImageStr, PhoneStr
 
 
 class Personal(BaseModel):
@@ -45,6 +45,7 @@ class Education(BaseModel):
     name: str
     specialization: str
     qualification: str
+    photo: Base64ImageStr
 
     class Config:
         alias_generator = to_camel
