@@ -8,8 +8,12 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods=['*']
+    allow_origins=[
+        'https://localhost:5173',
+        'http://localhost:5173',
+        'https://rabotavsem.by',
+    ],
+    allow_methods=['GET', 'POST']
 )
 
 
