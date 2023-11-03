@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import date
 from enum import Enum
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, PositiveInt
 from pydantic.alias_generators import to_camel
 
 from utils import Base64ImageStr, PhoneStr
@@ -14,12 +14,13 @@ class Personal(BaseModel):
         not_married = 'not-married'
 
     family_status: FamilyStatus
-    birthday: datetime
+    birthday: date
 
     class WantedJob(Enum):
         germany = 'germany'
         europe = 'europe'
 
+    salary: PositiveInt
     wanted_job: WantedJob
 
     class Config:
