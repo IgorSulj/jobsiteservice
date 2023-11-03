@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, EmailStr, PositiveInt
 from pydantic.alias_generators import to_camel
 
-from utils import Base64ImageStr, PhoneStr
+from fields import Base64ImageStr, PhoneStr
 
 
 class Personal(BaseModel):
