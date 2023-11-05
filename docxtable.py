@@ -1,3 +1,4 @@
+from docx import Document
 from fields import Base64ImageStr
 from models import Additional, Contacts, Education, Experience, Personal
 from models import WorkBlankModel
@@ -14,8 +15,8 @@ TableRows = tuple[TableRow, ...]
 
 
 class DocxTable:
-    def __init__(self, *rows: TableRows) -> None:
-        self.rows = rows
+    def __init__(self, *tables: TableRows) -> None:
+        self.tables = tables
 
     @staticmethod
     def from_blank(blank: WorkBlankModel) -> 'DocxTable':
@@ -27,7 +28,7 @@ class DocxTable:
             get_additional_rows(blank.additional)
         )
 
-    def as_docx_bytes(self) -> bytes:
+    def as_docx_bytes(self):
         raise NotImplementedError()
 
 
