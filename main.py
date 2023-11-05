@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from docxtable import DocxTable
 
 from models import WorkBlankModel
 
@@ -19,4 +20,4 @@ app.add_middleware(
 
 @app.post("/")
 def main(work_blank: WorkBlankModel):
-    print('Получил данные')
+    print(DocxTable.from_blank(work_blank))

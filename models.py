@@ -13,12 +13,24 @@ class Personal(BaseModel):
     class FamilyStatus(Enum):
         not_married = 'not-married'
 
+        def to_human_name(self):
+            match self:
+                case Personal.FamilyStatus.not_married:
+                    return 'Холост'
+
     family_status: FamilyStatus
     birthday: date
 
     class WantedJob(Enum):
         germany = 'germany'
         europe = 'europe'
+
+        def to_human_name(self):
+            match self:
+                case Personal.WantedJob.germany:
+                    return 'В Германии'
+                case Personal.WantedJob.europe:
+                    return 'На вахте'
 
     salary: PositiveInt
     wanted_job: WantedJob
