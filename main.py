@@ -20,4 +20,6 @@ app.add_middleware(
 
 @app.post("/")
 def main(work_blank: WorkBlankModel):
-    DocxTable.from_blank(work_blank).as_docx('res.docx')
+    docx_stream = DocxTable.from_blank(work_blank).as_docx_stream()
+    with open('res.docx', 'wb') as file:
+        file.write(docx_stream.read())

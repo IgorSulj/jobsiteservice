@@ -1,3 +1,4 @@
+import io
 from typing import Iterable
 import docx
 import docx.document as docxdocument
@@ -35,13 +36,16 @@ class DocxTable:
             'Дополнительно': (get_additional_rows(blank.additional),)
         })
 
-    def as_docx(self, target_path: str):
+    def as_docx_stream(self) -> io.BytesIO:
         document: docxdocument.Document = docx.Document()
         for tables_name, tables_data in self.tables.items():
             document.add_heading(tables_name)
             for table_data in tables_data:
                 self._insert_table(document, table_data)
-        document.save(target_path)
+        stream = io.BytesIO()
+        document.save(stream)
+        stream.seek(0)
+        return stream
 
     def _insert_table(self, document: docxdocument.Document, table_data):
         table = document.add_table(len(table_data), 2)
@@ -58,9 +62,9 @@ class DocxTable:
             run.add_text(value)
         elif isinstance(value, Image):
             run.add_picture(
-                            get_binary_image_data(value.data),
-                            width=Cm(7)
-                        )
+                get_binary_image_data(value.data),
+                width=Cm(7)
+            )
 
 
 def get_personal_rows(personal: Personal) -> TableRows:
