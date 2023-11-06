@@ -20,4 +20,4 @@ app.add_middleware(
 
 @app.post("/")
 def main(work_blank: WorkBlankModel):
-    print(DocxTable.from_blank(work_blank))
+    DocxTable.from_blank(work_blank).as_docx('res.docx')

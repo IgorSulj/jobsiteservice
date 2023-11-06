@@ -1,5 +1,8 @@
-from docx import Document
-from fields import Base64ImageStr
+from typing import Iterable
+import docx
+import docx.document as docxdocument
+from docx.shared import Cm
+from fields import Base64ImageStr, get_binary_image_data
 from models import Additional, Contacts, Education, Experience, Personal
 from models import WorkBlankModel
 
@@ -15,21 +18,49 @@ TableRows = tuple[TableRow, ...]
 
 
 class DocxTable:
-    def __init__(self, *tables: TableRows) -> None:
+    def __init__(self, tables: dict[str, Iterable[TableRows]]) -> None:
         self.tables = tables
 
     @staticmethod
     def from_blank(blank: WorkBlankModel) -> 'DocxTable':
-        return DocxTable(
-            get_personal_rows(blank.personal),
-            get_contacts_rows(blank.contacts),
-            *(get_education_rows(i) for i in blank.education),
-            *(get_experience_rows(i) for i in blank.experience),
-            get_additional_rows(blank.additional)
-        )
+        return DocxTable({
+            'Личные данные': (get_personal_rows(blank.personal),),
+            'Контакты': (get_contacts_rows(blank.contacts),),
+            'Образование': tuple(
+                get_education_rows(i) for i in blank.education
+            ),
+            'Опыт работы': tuple(
+                get_experience_rows(i) for i in blank.experience
+            ),
+            'Дополнительно': (get_additional_rows(blank.additional),)
+        })
 
-    def as_docx_bytes(self):
-        raise NotImplementedError()
+    def as_docx(self, target_path: str):
+        document: docxdocument.Document = docx.Document()
+        for tables_name, tables_data in self.tables.items():
+            document.add_heading(tables_name)
+            for table_data in tables_data:
+                self._insert_table(document, table_data)
+        document.save(target_path)
+
+    def _insert_table(self, document: docxdocument.Document, table_data):
+        table = document.add_table(len(table_data), 2)
+        for row, row_data in zip(table.rows, table_data):
+            cells = row.cells
+            cells[0].add_paragraph(row_data[0])
+            paragraph = cells[1].add_paragraph()  # type: ignore
+            run = paragraph.add_run()
+            self._insert_table_value(row_data[1], run)
+        document.add_page_break()
+
+    def _insert_table_value(self, value: TableValue, run):
+        if isinstance(value, str):
+            run.add_text(value)
+        elif isinstance(value, Image):
+            run.add_picture(
+                            get_binary_image_data(value.data),
+                            width=Cm(7)
+                        )
 
 
 def get_personal_rows(personal: Personal) -> TableRows:
@@ -38,7 +69,7 @@ def get_personal_rows(personal: Personal) -> TableRows:
         ('Имя латиницей', personal.english_name),
         ('Семейный статус', personal.family_status.to_human_name()),
         ('День рождения', format(personal.birthday, "%d.%m.%Y")),
-        ('Зарплата', str(personal.salary)),
+        ('Желаемая зарплата', str(personal.salary)),
         ('Желаемая работа', personal.wanted_job.to_human_name())
     )
 
@@ -61,7 +92,7 @@ def get_education_rows(education: Education) -> TableRows:
         ('Название ВУЗа', education.name),
         ('Специализация', education.specialization),
         ('Квалификация', education.qualification),
-        ('Фото', Image(education.photo))
+        ('Фото диплома', Image(education.photo))
     )
 
 
