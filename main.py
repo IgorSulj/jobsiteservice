@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from docxtable import DocxTable
-
+from dotenv import load_dotenv
+from send_email import send_blank
 from models import WorkBlankModel
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -20,6 +22,4 @@ app.add_middleware(
 
 @app.post("/")
 def main(work_blank: WorkBlankModel):
-    docx_stream = DocxTable.from_blank(work_blank).as_docx_stream()
-    with open('res.docx', 'wb') as file:
-        file.write(docx_stream.read())
+    send_blank(work_blank)
