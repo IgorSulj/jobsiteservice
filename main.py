@@ -1,8 +1,9 @@
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-from send_email import send_blank
+
 from models import WorkBlankModel
+from send_email import send_blank
 
 load_dotenv()
 
