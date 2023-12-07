@@ -1,11 +1,10 @@
-from email.message import EmailMessage
 import os
 import smtplib
+from email.message import EmailMessage
 
 from docxtable import DocxTable
 from env import DEBUG, HOME_EMAIL, PASSWORD, RESERVE_EMAIL
 from models import WorkBlankModel
-
 
 DOCX_FORMAT = ('application',
                'vnd.openxmlformats-officedocument.wordprocessingml.document')
@@ -35,7 +34,7 @@ class SmtpHandlerMock(EmailHandler):  # type: ignore
 MainHandler = SmtpHandlerMock
 
 if not DEBUG:
-    client = smtplib.SMTP('mail.schooltour.by', 25)
+    client = smtplib.SMTP('mail.rabotavsem.by', 25)
     client.starttls()
     client.login(HOME_EMAIL, PASSWORD)
 
