@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from fastapi.responses import PlainTextResponse
 from send_email import send_blank
 from models import WorkBlankModel
 
@@ -23,3 +24,4 @@ app.add_middleware(
 @app.post("/")
 def main(work_blank: WorkBlankModel):
     send_blank(work_blank)
+    return PlainTextResponse()

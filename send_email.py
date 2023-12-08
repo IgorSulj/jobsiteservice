@@ -14,7 +14,7 @@ DOCX_FORMAT = ('application',
 def generate_message(docx_table: DocxTable, target: str) -> EmailMessage:
     msg = EmailMessage()
     msg['From'] = os.getenv('HOME_EMAIL')
-    msg['To'] = docx_table
+    msg['To'] = target
     msg.add_attachment(docx_table.as_docx_stream().read(),
                        maintype=DOCX_FORMAT[0], subtype=DOCX_FORMAT[1])
     return msg
@@ -29,7 +29,7 @@ class EmailHandler:
 class SmtpHandlerMock(EmailHandler):  # type: ignore
     @classmethod
     def send_email(cls, email: EmailMessage):
-        print(email)
+        print("Sending email... (mock)")
 
 
 MainHandler = SmtpHandlerMock
