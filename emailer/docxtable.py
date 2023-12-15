@@ -3,7 +3,7 @@ from typing import Iterable
 import docx
 import docx.document as docxdocument
 from docx.shared import Cm
-from fields import Base64ImageStr, get_binary_image_data
+from models.fields import Base64ImageStr, get_binary_image_data
 from models import Additional, Contacts, Education, Experience, Personal
 from models import WorkBlankModel
 

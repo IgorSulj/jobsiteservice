@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from models import WorkBlankModel
-from send_email import send_blank
+from emailer import send_blank
 
 
 app = FastAPI()

@@ -2,7 +2,7 @@ import os
 import smtplib
 from email.message import EmailMessage
 
-from docxtable import DocxTable
+from .docxtable import DocxTable
 from env import DEBUG, HOME_EMAIL, PASSWORD, RESERVE_EMAIL
 from models import WorkBlankModel
 
