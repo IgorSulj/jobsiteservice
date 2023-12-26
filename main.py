@@ -3,9 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 from models import WorkBlankModel
 from emailer import send_blank
+import env
 
 
-app = FastAPI()
+if env.DEBUG:
+    app = FastAPI()
+else:
+    app = FastAPI(docs_url=None, redoc_url=None)
 
 
 app.add_middleware(
