@@ -27,7 +27,7 @@ class EmailHandler:
         raise NotImplementedError()
 
 
-class SmtpHandlerMock(EmailHandler):  # type: ignore
+class SmtpHandlerMock(EmailHandler):
     @classmethod
     def send_email(cls, email: EmailMessage):
         print("Sending email... (mock)")
