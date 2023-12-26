@@ -10,12 +10,14 @@ DOCX_FORMAT = ('application',
                'vnd.openxmlformats-officedocument.wordprocessingml.document')
 
 
-def generate_message(docx_table: DocxTable, target: str) -> EmailMessage:
+def generate_message(docx_table: DocxTable, target: str, subject='Анкета', text='') -> EmailMessage:
     msg = EmailMessage()
+    msg['Subject'] = 'Заполненная анкета'
     msg['From'] = os.getenv('HOME_EMAIL')
     msg['To'] = target
+    msg.set_content(text)
     msg.add_attachment(docx_table.as_docx_stream().read(),
-                       maintype=DOCX_FORMAT[0], subtype=DOCX_FORMAT[1])
+                       maintype=DOCX_FORMAT[0], subtype=DOCX_FORMAT[1], filename='Анкета.docx')
     return msg
 
 
@@ -52,8 +54,16 @@ def send_blank(
 
     docx_table = DocxTable.from_blank(blank)
     email_handler.send_email(
-        generate_message(docx_table, blank.contacts.email)
+        generate_message(
+            docx_table, 
+            target=blank.contacts.email, 
+            text='Это ваша копия анкеты. Она также была автоматически отправлена нам.'
+        )
     )
     email_handler.send_email(
-        generate_message(docx_table, RESERVE_EMAIL)
+        generate_message(
+            docx_table, 
+            target=RESERVE_EMAIL,
+            subject=f'Анкета от {blank.personal.russian_name}',
+        )
     )
