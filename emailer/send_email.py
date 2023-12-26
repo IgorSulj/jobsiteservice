@@ -36,7 +36,7 @@ class SmtpHandlerMock(EmailHandler):
 MainHandler = SmtpHandlerMock
 
 if not DEBUG:
-    client = smtplib.SMTP('mail.rabotavsem.by', 25)
+    client = smtplib.SMTP('mail.rabotavsem.by', 587)
     client.starttls()
     client.login(HOME_EMAIL, PASSWORD)
 
